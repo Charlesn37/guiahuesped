@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html><!-- lang se inyecta desde config -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" id="meta-description" content="">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" id="meta-theme" content="">
+  <title id="page-title"></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <script src="config.js"></script>
+
+  <style>
+    :root {
+      --primary:      #0284c7;
+      --primary-dark: #075985;
+      --accent:       #f59e0b;
+      --dark:         #0f172a;
+      --slate:        #64748b;
+      --bg:           #f8fafc;
+      --white:        #ffff;
+      --whatsapp:     #25D366;
+      --success:      #10b981;
+      --error:        #ef4444;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--dark); line-height: 1.6; padding-bottom: 100px; }
+
+    .app-header { background: var(--white); padding: 1.2rem; text-align: center; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 1.2rem; color: var(--primary-dark); position: relative; }
+
+    .lang-toggle { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); background: var(--bg); border: 1px solid #e2e8f0; color: var(--primary-dark); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; cursor: pointer; transition: background 0.15s; }
+    .lang-toggle:hover { background: #e0f2fe; }
+    .lang-toggle:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+    .time-banner { display: flex; justify-content: space-around; background: #e0f2fe; padding: 10px; font-size: 0.8rem; font-weight: 700; color: var(--primary-dark); }
+
+    .arrival-badge { background: var(--dark); color: var(--white); margin: 1rem 1.2rem; padding: 1.2rem; border-radius: 20px; display: grid; gap: 10px; text-align: center; box-shadow: 0 10px 20px rgba(15,23,42,0.1); }
+    .arrival-item span { display: block; font-size: 0.6rem; text-transform: uppercase; opacity: 0.7; margin-bottom: 2px; letter-spacing: 0.5px; }
+    .arrival-item strong { font-size: 1.3rem; font-weight: 800; }
+
+    .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; padding: 0 1.2rem 1.2rem; }
+
+    .btn-card { background: var(--white); padding: 1.2rem 0.8rem; border-radius: 18px; text-decoration: none; color: var(--dark); display: flex; flex-direction: column; align-items: center; text-align: center; font-weight: 700; font-size: 0.85rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.15s ease; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-card:active { transform: scale(0.96); }
+    .btn-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .btn-card svg { width: 24px; height: 24px; margin-bottom: 8px; color: var(--primary); }
+    .btn-full { grid-column: span 2; }
+
+    .btn-wifi { background: var(--primary); color: var(--white); border: none; box-shadow: 0 4px 12px rgba(2,132,199,0.3); transition: background 0.3s ease, transform 0.15s ease; }
+    .btn-wifi svg { color: var(--white); }
+
+    .section { padding: 0 1.2rem 1.2rem; scroll-margin-top: 20px; }
+    .content-box { background: var(--white); padding: 1.5rem; border-radius: 24px; border: 1px solid #e2e8f0; }
+    h2 { font-size: 1.1rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--primary-dark); }
+
+    .item-flex { display: flex; gap: 12px; margin-bottom: 18px; align-items: flex-start; }
+    .item-text strong { display: block; font-size: 0.9rem; color: var(--dark); margin-bottom: 4px; }
+    .item-text p { font-size: 0.85rem; color: var(--slate); line-height: 1.5; }
+
+    .wa-float { position: fixed; bottom: 25px; right: 25px; background-color: var(--whatsapp); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(37,211,102,0.4); z-index: 999; text-decoration: none; transition: transform 0.15s ease; }
+    .wa-float:active { transform: scale(0.94); }
+    .wa-float:focus-visible { outline: 3px solid var(--whatsapp); outline-offset: 3px; }
+
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.is-open { display: flex; }
+
+    .modal-card { background: white; padding: 2rem; border-radius: 28px; width: 100%; max-width: 400px; text-align: center; }
+
+    .btn-modal { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 700; margin-top: 10px; cursor: pointer; display: block; font-size: 1rem; font-family: 'Inter', sans-serif; transition: opacity 0.15s ease; text-decoration: none; }
+    .btn-modal:active { opacity: 0.85; }
+    .btn-modal:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-ghost { background: #f1f5f9; color: var(--slate); }
+
+    .hidden { display: none !important; }
+
+    .check-label { display: flex; align-items: center; gap: 12px; padding: 10px 0; font-size: 0.9rem; cursor: pointer; text-align: left; border-bottom: 1px solid #f8fafc; transition: color 0.2s; }
+    .check-label input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+    .check-label.checked { color: var(--success); text-decoration: line-through; opacity: 0.7; }
+
+    .checklist-error { font-size: 0.8rem; color: var(--error); margin-top: 8px; font-weight: 600; min-height: 20px; text-align: left; }
+
+    .video-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 8px 15px; border-radius: 10px; transition: background 0.15s; cursor: pointer; font-family: 'Inter', sans-serif; background: none; }
+    .video-link:hover { background: #e0f2fe; }
+    .video-link:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .video-link svg { width: 16px; flex-shrink: 0; }
+  </style>
+</head>
+
+<body>
+
+  <header class="app-header" id="app-header">
+    <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()"></button>
+  </header>
+
+  <div class="time-banner" id="time-banner" aria-label="Horarios de llegada y salida"></div>
+
+  <div class="arrival-badge" id="arrival-badge" aria-label="Datos de tu unidad"></div>
+
+  <div class="action-grid" id="action-grid" role="list"></div>
+
+  <div id="sections-container"></div>
+
+  <!-- Botón flotante WA -->
+  <a id="wa-float" class="wa-float" target="_blank" rel="noopener noreferrer">
+    <svg aria-hidden="true" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+    </svg>
+  </a>
+
+  <!-- MODAL VIDEO -->
+  <div id="modalVideo" class="modal-overlay" role="dialog" aria-modal="true" style="padding: 16px;">
+    <div id="video-wrapper" style="border-radius:16px; overflow:hidden; position:relative; background:#000;">
+      <button id="btn-close-video" onclick="closeVideo()" style="position:absolute; top:10px; right:10px; z-index:10; background:rgba(0,0,0,0.6); border:none; color:white; border-radius:50%; width:36px; height:36px; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      <div id="video-ratio" style="position:relative; height:0;">
+        <iframe id="videoFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CHECKOUT -->
+  <div id="modalCheckout" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div id="step-check">
+        <h2 id="modal-title" style="color: var(--primary); justify-content: center;"></h2>
+        <p id="modal-subtitle" style="font-size: 0.85rem; color: var(--slate); margin-bottom: 1.2rem;"></p>
+        <div id="checklist-items" style="text-align:left; margin-bottom: 0.5rem;"></div>
+        <p class="checklist-error" id="checklist-error" aria-live="polite"></p>
+        <button class="btn-modal btn-primary" id="btn-confirm" onclick="verifyChecklist()"></button>
+        <button class="btn-modal btn-ghost"   id="btn-stay"    onclick="closeModal()"></button>
+      </div>
+      <div id="step-ask" class="hidden">
+        <h2 id="modal-exp-title" style="justify-content: center;"></h2>
+        <p  id="modal-exp-subtitle" style="font-size: 0.9rem; margin-bottom: 1.2rem;"></p>
+        <button class="btn-modal btn-primary" id="btn-excellent"   onclick="finalProcess('excellent')"></button>
+        <button class="btn-modal btn-ghost"   id="btn-suggestions" onclick="finalProcess('suggestions')"></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ════════════════════════════════════════════════════════
+  //  INTERNACIONALIZACIÓN
+  // ════════════════════════════════════════════════════════
+
+  // Idioma activo: query param → config → fallback "es"
+  window.__lang = new URLSearchParams(window.location.search).get("lang")
+    || GUEST_CONFIG.property.language
+    || "es";
+
+  // Helper de traducción
+  function t(value) {
+    if (!value || typeof value === "string") return value || "";
+    return value[window.__lang] || value.es || "";
+  }
+
+  // Cambio de idioma (recarga con ?lang=)
+  function toggleLang() {
+    const next = window.__lang === "es" ? "en" : "es";
+    const url  = new URL(window.location);
+    url.searchParams.set("lang", next);
+    window.location.href = url.toString();
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  //  MOTOR DE PLANTILLA — lee GUEST_CONFIG y construye el DOM
+  // ════════════════════════════════════════════════════════
+  (function() {
+    const C = GUEST_CONFIG;
+
+    // ── Colores de marca ────
+    if (C.colors) {
+      const root = document.documentElement.style;
+      if (C.colors.primary)     root.setProperty("--primary",      C.colors.primary);
+      if (C.colors.primaryDark) root.setProperty("--primary-dark", C.colors.primaryDark);
+      if (C.colors.accent)      root.setProperty("--accent",       C.colors.accent);
+    }
+
+    // ── Meta / head ────
+    document.documentElement.lang = window.__lang;
+    document.getElementById("page-title").textContent = C.property.name + " | " + t(C.property.tagline);
+    document.getElementById("meta-description").content = t(C.property.description) || "";
+    document.getElementById("meta-theme").content = C.property.themeColor || "#0284c7";
+
+    // ── Header ────
+    const header = document.getElementById("app-header");
+    // Insertar texto antes del botón de idioma
+    header.insertAdjacentText("afterbegin", t(C.ui.welcomeHeader) + " " + C.property.name);
+    document.getElementById("lang-toggle").textContent = window.__lang === "es" ? "EN" : "ES";
+
+    // ── Time banner ────
+    const tb = document.getElementById("time-banner");
+    tb.innerHTML =
+      `<span>${t(C.ui.checkin)}: ${C.schedule.checkin}</span>` +
+      `<span>${t(C.ui.checkout)}: ${C.schedule.checkout}</span>`;
+
+    // ── Badge ────
+    const badge = document.getElementById("arrival-badge");
+    badge.style.gridTemplateColumns = `repeat(${C.badge.length}, 1fr)`;
+    badge.innerHTML = C.badge.map(item =>
+      `<div class="arrival-item">
+         <span>${t(item.label)}</span>
+         <strong>${item.value}</strong>
+       </div>`
+    ).join("");
+
+    // ── WhatsApp flotante ────
+    const waBtn = document.getElementById("wa-float");
+    waBtn.href       = "https://wa.me/" + C.contact.whatsapp;
+    waBtn.setAttribute("aria-label", t(C.ui.whatsapp.ariaLabel));
+
+    // ── Video close button aria-label ────
+    document.getElementById("btn-close-video").setAttribute("aria-label", t(C.ui.video.closeLabel));
+
+    // ── Action grid ────
+    const grid = document.getElementById("action-grid");
+
+    // Wi-Fi
+    grid.innerHTML += `
+      <button class="btn-card btn-wifi btn-full" onclick="copyWifi(this)"
+        aria-label="\${t(C.ui.wifi.connect)}" role="listitem">
+        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+            d="M5 12a11 11 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/>
+        </svg>
+        <span id="wifi-label">\${t(C.ui.wifi.connect)}</span>
+      </button>`;
+
+    // Ubicación
+    grid.innerHTML += `
+      <a href="\${C.location.googleMapsUrl}" target="_blank" rel="noopener noreferrer"
+        class="btn-card" role="listitem" aria-label="\${t(C.ui.buttons.location)}">
+        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+        </svg>
+        ${t(C.ui.buttons.location)}
+      </a>`;
+
+    // Agua caliente
+    if (C.waterSystem && C.waterSystem.show) {
+      grid.innerHTML += `
+        <a href="#agua" class="btn-card" role="listitem">
+          <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          ${C.waterSystem.icon} ${t(C.waterSystem.title)}
+        </a>`;
+    }
+
+    // Armonía
+    if (C.harmony && C.harmony.show) {
+      grid.innerHTML += `
+        <a href="#armonia" class="btn-card" role="listitem">
+          <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          ${t(C.harmony.title)}
+        </a>`;
+    }
+
+    // Checkout
+    grid.innerHTML += `
+      <button class="btn-card btn-full" onclick="openCheckout()" aria-haspopup="dialog" role="listitem">
+        <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        \${t(C.ui.buttons.checkout)}
+      </button>`;
+
+    // ── Secciones dinámicas ────
+    const container = document.getElementById("sections-container");
+    let sectionsHTML = "";
+
+    // Bienvenida
+    if (C.welcome && C.welcome.show) {
+      sectionsHTML += `
+        <section class="section" id="bienvenida">
+          <div class="content-box">
+            <h2>\${C.welcome.icon} ${t(C.welcome.title)}</h2>
+            <p>${t(C.welcome.body)}</p>
+            ${C.welcome.note ? `<p style="font-size:0.85rem; color:#666; margin-top:1rem;">${t(C.welcome.note)}</p>` : ""}
+          </div>
+        </section>`;
+    }
+
+    // Armonía
+    if (C.harmony && C.harmony.show) {
+      sectionsHTML += `
+        <section class="section" id="armonia" aria-labelledby="armonia-title">
+          <div class="content-box">
+            <h2 id="armonia-title">${C.harmony.icon} ${t(C.harmony.title)}</h2>
+            \${C.harmony.items.map(item => `
+              <div class="item-flex">
+                <span aria-hidden="true" style="font-size:1.4rem">\${item.icon}</span>
+                <div class="item-text">
+                  <strong>${t(item.title)}</strong>
+                  <p>${t(item.body)}</p>
+                </div>
+              </div>`).join("")}
+            ${C.harmony.footer ? `<p style="font-size:0.85rem; color:#555; margin-top:1.5rem;">${t(C.harmony.footer)}</p>` : ""}
+          </div>
+        </section>`;
+    }
+
+    // Agua caliente + entretenimiento
+    if ((C.waterSystem && C.waterSystem.show) || (C.entertainment && C.entertainment.show)) {
+      sectionsHTML += `<section class="section" id="agua" aria-labelledby="agua-title"><div class="content-box">`;
+
+      if (C.waterSystem && C.waterSystem.show) {
+        const stepsHTML = C.waterSystem.steps.map(s => `<li>${t(s)}</li>`).join("");
+
+        const videoBtn = (C.video && C.video.youtubeId)
+          ? `<button onclick="openVideo()" class="video-link" aria-label="${t(C.video.buttonLabel)}">
+               <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+               \${t(C.video.buttonLabel)}
+             </button>`
+          : "";
+
+        sectionsHTML += `
+          <h2 id="agua-title">\${C.waterSystem.icon} \${t(C.waterSystem.title)}</h2>
+          <p style="font-size:0.85rem; color:var(--slate); margin-bottom:12px;">\${t(C.waterSystem.subtitle)}</p>
+          <ol style="font-size:0.85rem; padding-left:1.2rem; color:var(--dark); margin-bottom:15px;">
+            ${stepsHTML}
+          </ol>
+          ${videoBtn}`;
+
+        if (C.entertainment && C.entertainment.show) {
+          sectionsHTML += `<hr style="margin:1.5rem 0; border:0; border-top:1px solid #f1f5f9;">`;
+        }
+      }
+
+      if (C.entertainment && C.entertainment.show) {
+        sectionsHTML += `
+          <h2>${C.entertainment.icon} ${t(C.entertainment.title)}</h2>
+          <p style="font-size:0.85rem; color:var(--slate);">${t(C.entertainment.body)}</p>`;
+      }
+
+      sectionsHTML += `</div></section>`;
+    }
+
+    // Salida tardía
+    if (C.lateCheckout && C.lateCheckout.show) {
+      sectionsHTML += `
+        <section class="section" aria-labelledby="late-title">
+          <div class="content-box">
+            <h2 id="late-title">${C.lateCheckout.icon} ${t(C.lateCheckout.title)}</h2>
+            <p style="font-size:0.85rem; color:var(--slate);">${t(C.lateCheckout.body)}</p>
+          </div>
+        </section>`;
+    }
+
+    container.innerHTML = sectionsHTML;
+
+    // ── Checklist de salida ────
+    const checklistEl = document.getElementById("checklist-items");
+    checklistEl.innerHTML = C.checkoutChecklist.map((item, i) =>
+      `<label class="check-label" id="lbl-${i}">
+         <input type="checkbox" class="check-item" onchange="toggleLabel(this)"> ${t(item)}
+       </label>`
+    ).join("");
+
+    // ── Modal checkout — textos ────
+    document.getElementById("modal-title").textContent       = t(C.ui.modal.title);
+    document.getElementById("modal-subtitle").textContent    = t(C.ui.modal.subtitle);
+    document.getElementById("btn-confirm").textContent       = t(C.ui.modal.confirm);
+    document.getElementById("btn-stay").textContent          = t(C.ui.modal.stay);
+    document.getElementById("modal-exp-title").textContent   = t(C.ui.modal.experienceTitle);
+    document.getElementById("modal-exp-subtitle").textContent= t(C.ui.modal.experienceSubtitle);
+    document.getElementById("btn-excellent").textContent     = t(C.ui.modal.excellent);
+    document.getElementById("btn-suggestions").textContent   = t(C.ui.modal.suggestions);
+
+    // ── Video modal: dimensiones ────
+    if (C.video && C.video.youtubeId) {
+      const wrapper = document.getElementById("video-wrapper");
+      const ratio   = document.getElementById("video-ratio");
+      const frame   = document.getElementById("videoFrame");
+      const modal   = document.getElementById("modalVideo");
+
+      modal.setAttribute("aria-label", t(C.video.modalLabel) || "Video tutorial");
+      frame.title = t(C.video.title) || "Video tutorial";
+
+      if (C.video.vertical) {
+        wrapper.style.width       = "100%";
+        wrapper.style.maxWidth    = "340px";
+        ratio.style.paddingBottom = "177.78%";
+      } else {
+        wrapper.style.width       = "100%";
+        wrapper.style.maxWidth    = "480px";
+        ratio.style.paddingBottom = "56.25%";
+      }
+    }
+
+  })();
+
+
+  // ════════════════════════════════════════════════════════
+  //  LÓGICA FUNCIONAL
+  // ════════════════════════════════════════════════════════
+
+  // ── Wi-Fi ────
+  const _w = GUEST_CONFIG.wifi.password.split("").reverse().join("");
+
+  function copyWifi(btn) {
+    const label = document.getElementById("wifi-label");
+    const write = () => _wifiSuccess(btn, label);
+
+    if (!navigator.clipboard) {
+      const ta = document.createElement("textarea");
+      ta.value = _w; ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:absolute;left:-9999px";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+      write(); return;
+    }
+    navigator.clipboard.writeText(_w).then(write).catch(() => {
+      label.innerText = t(GUEST_CONFIG.ui.wifi.fallback) + " " + _w;
+    });
+  }
+
+  function _wifiSuccess(btn, label) {
+    label.innerText = t(GUEST_CONFIG.ui.wifi.copied);
+    btn.style.background = "var(--success)";
+    setTimeout(() => {
+      label.innerText = t(GUEST_CONFIG.ui.wifi.connect);
+      btn.style.background = "";
+    }, 3000);
+  }
+
+  // ── Modal checkout ────
+  const modal      = document.getElementById("modalCheckout");
+  let   _lastFocus = null;
+
+  function openCheckout() {
+    _lastFocus = document.activeElement;
+    resetModal();
+    modal.classList.add("is-open");
+    const first = modal.querySelector("button");
+    if (first) first.focus();
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.classList.remove("is-open");
+    document.body.style.overflow = "";
+    if (_lastFocus) _lastFocus.focus();
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key !== "Escape") return;
+    if (modal.classList.contains("is-open"))      closeModal();
+    if (modalVideo.classList.contains("is-open")) closeVideo();
+  });
+
+  modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
+
+  // ── Checklist ────
+  function toggleLabel(checkbox) {
+    checkbox.closest("label").classList.toggle("checked", checkbox.checked);
+    document.getElementById("checklist-error").textContent = "";
+  }
+
+  function verifyChecklist() {
+    const pending = Array.from(document.querySelectorAll(".check-item")).filter(c => !c.checked);
+    if (pending.length === 0) {
+      goStep("ask");
+    } else {
+      const tpl = t(GUEST_CONFIG.ui.modal.pendingError);
+      document.getElementById("checklist-error").textContent =
+        tpl.replace("{n}", pending.length);
+      pending[0].closest("label").querySelector("input").focus();
+    }
+  }
+
+  function goStep(stepId) {
+    ["step-check", "step-ask"].forEach(s => document.getElementById(s).classList.add("hidden"));
+    const el = document.getElementById("step-" + stepId);
+    el.classList.remove("hidden");
+    const first = el.querySelector("button, a");
+    if (first) first.focus();
+  }
+
+  function finalProcess(type) {
+    const C        = GUEST_CONFIG;
+    const feedback = type === "excellent"
+      ? t(C.ui.checkout.feedbackExcellent)
+      : t(C.ui.checkout.feedbackSuggestions);
+
+    const tpl     = t(C.ui.checkout.waMessage);
+    const message = encodeURIComponent(
+      tpl.replace("{id}", C.contact.deptId).replace("{feedback}", feedback)
+    );
+
+    closeModal();
+    setTimeout(() => {
+      window.location.href = `https://wa.me/${C.contact.whatsapp}?text=${message}`;
+    }, 100);
+  }
+
+  function resetModal() {
+    goStep("check");
+    document.querySelectorAll(".check-item").forEach(c => {
+      c.checked = false;
+      c.closest("label").classList.remove("checked");
+    });
+    document.getElementById("checklist-error").textContent = "";
+  }
+
+  // ── Modal video ────
+  const modalVideo = document.getElementById("modalVideo");
+
+  function openVideo() {
+    const C   = GUEST_CONFIG;
+    const src = `https://www.youtube.com/embed/${C.video.youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+    document.getElementById("videoFrame").src = src;
+    modalVideo.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeVideo() {
+    document.getElementById("videoFrame").src = "";
+    modalVideo.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  modalVideo.addEventListener("click", function(e) { if (e.target === modalVideo) closeVideo(); });
+
+  </script>
+
+</body>
+</html>
