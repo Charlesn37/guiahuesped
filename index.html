@@ -525,7 +525,7 @@
 
   function openVideo() {
     const C   = GUEST_CONFIG;
-    const src = `https://www.youtube.com/embed/${C.video.youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+    const src = `https://www.youtube.com/embed/${C.video.youtubeId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1`;
     document.getElementById("videoFrame").src = src;
     modalVideo.classList.add("is-open");
     document.body.style.overflow = "hidden";
