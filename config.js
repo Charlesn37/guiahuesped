@@ -10,8 +10,8 @@ const GUEST_CONFIG = {
 
   ui: {
     welcomeHeader: { es: "Bienvenidos a",  en: "Welcome to"  },
-    checkin:       { es: "Llegada",         en: "Check-in"    },
-    checkout:      { es: "Salida",          en: "Check-out"   },
+    checkinLabel:       { es: "Llegada",         en: "Check-in"    },
+    checkoutLabel:      { es: "Salida",          en: "Check-out"   },
 
     wifi: {
       connect:  { es: "Conectar a Wi-Fi (Copiar clave)",  en: "Connect to Wi-Fi (Copy password)" },
