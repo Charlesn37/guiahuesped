@@ -172,7 +172,7 @@
   // ════════════════════════════════════════════════════════
   //  MOTOR DE PLANTILLA — lee GUEST_CONFIG y construye el DOM
   // ════════════════════════════════════════════════════════
-  (function() {
+(function() {
     const C = GUEST_CONFIG;
 
     // ── Colores de marca ────
@@ -191,15 +191,14 @@
 
     // ── Header ────
     const header = document.getElementById("app-header");
-    // Insertar texto antes del botón de idioma
     header.insertAdjacentText("afterbegin", t(C.ui.welcomeHeader) + " " + C.property.name);
     document.getElementById("lang-toggle").textContent = window.__lang === "es" ? "EN" : "ES";
 
     // ── Time banner ────
     const tb = document.getElementById("time-banner");
     tb.innerHTML =
-      `<span>${t(C.ui.checkin)}: ${C.schedule.checkin}</span>` +
-      `<span>${t(C.ui.checkout)}: ${C.schedule.checkout}</span>`;
+      `<span>${t(C.ui.checkinLabel)}: ${C.schedule.checkin}</span>` +
+      `<span>${t(C.ui.checkoutLabel)}: ${C.schedule.checkout}</span>`;
 
     // ── Badge ────
     const badge = document.getElementById("arrival-badge");
@@ -213,7 +212,7 @@
 
     // ── WhatsApp flotante ────
     const waBtn = document.getElementById("wa-float");
-    waBtn.href       = "https://wa.me/" + C.contact.whatsapp;
+    waBtn.href = "https://wa.me/" + C.contact.whatsapp;
     waBtn.setAttribute("aria-label", t(C.ui.whatsapp.ariaLabel));
 
     // ── Video close button aria-label ────
@@ -225,18 +224,18 @@
     // Wi-Fi
     grid.innerHTML += `
       <button class="btn-card btn-wifi btn-full" onclick="copyWifi(this)"
-        aria-label="\${t(C.ui.wifi.connect)}" role="listitem">
+        aria-label="${t(C.ui.wifi.connect)}" role="listitem">
         <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
             d="M5 12a11 11 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/>
         </svg>
-        <span id="wifi-label">\${t(C.ui.wifi.connect)}</span>
+        <span id="wifi-label">${t(C.ui.wifi.connect)}</span>
       </button>`;
 
     // Ubicación
     grid.innerHTML += `
-      <a href="\${C.location.googleMapsUrl}" target="_blank" rel="noopener noreferrer"
-        class="btn-card" role="listitem" aria-label="\${t(C.ui.buttons.location)}">
+      <a href="${C.location.googleMapsUrl}" target="_blank" rel="noopener noreferrer"
+        class="btn-card" role="listitem" aria-label="${t(C.ui.buttons.location)}">
         <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -274,7 +273,7 @@
         <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
-        \${t(C.ui.buttons.checkout)}
+        ${t(C.ui.buttons.checkout)}
       </button>`;
 
     // ── Secciones dinámicas ────
@@ -286,7 +285,7 @@
       sectionsHTML += `
         <section class="section" id="bienvenida">
           <div class="content-box">
-            <h2>\${C.welcome.icon} ${t(C.welcome.title)}</h2>
+            <h2>${C.welcome.icon} ${t(C.welcome.title)}</h2>
             <p>${t(C.welcome.body)}</p>
             ${C.welcome.note ? `<p style="font-size:0.85rem; color:#666; margin-top:1rem;">${t(C.welcome.note)}</p>` : ""}
           </div>
@@ -295,19 +294,25 @@
 
     // Armonía
     if (C.harmony && C.harmony.show) {
+      const harmonyItems = C.harmony.items.map(function(item) {
+        return '<div class="item-flex">' +
+          '<span aria-hidden="true" style="font-size:1.4rem">' + item.icon + '</span>' +
+          '<div class="item-text">' +
+          '<strong>' + t(item.title) + '</strong>' +
+          '<p>' + t(item.body) + '</p>' +
+          '</div></div>';
+      }).join("");
+
+      const harmonyFooter = C.harmony.footer
+        ? '<p style="font-size:0.85rem; color:#555; margin-top:1.5rem;">' + t(C.harmony.footer) + '</p>'
+        : "";
+
       sectionsHTML += `
         <section class="section" id="armonia" aria-labelledby="armonia-title">
           <div class="content-box">
             <h2 id="armonia-title">${C.harmony.icon} ${t(C.harmony.title)}</h2>
-            \${C.harmony.items.map(item => `
-              <div class="item-flex">
-                <span aria-hidden="true" style="font-size:1.4rem">\${item.icon}</span>
-                <div class="item-text">
-                  <strong>${t(item.title)}</strong>
-                  <p>${t(item.body)}</p>
-                </div>
-              </div>`).join("")}
-            ${C.harmony.footer ? `<p style="font-size:0.85rem; color:#555; margin-top:1.5rem;">${t(C.harmony.footer)}</p>` : ""}
+            ${harmonyItems}
+            ${harmonyFooter}
           </div>
         </section>`;
     }
@@ -322,13 +327,13 @@
         const videoBtn = (C.video && C.video.youtubeId)
           ? `<button onclick="openVideo()" class="video-link" aria-label="${t(C.video.buttonLabel)}">
                <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-               \${t(C.video.buttonLabel)}
+               ${t(C.video.buttonLabel)}
              </button>`
           : "";
 
         sectionsHTML += `
-          <h2 id="agua-title">\${C.waterSystem.icon} \${t(C.waterSystem.title)}</h2>
-          <p style="font-size:0.85rem; color:var(--slate); margin-bottom:12px;">\${t(C.waterSystem.subtitle)}</p>
+          <h2 id="agua-title">${C.waterSystem.icon} ${t(C.waterSystem.title)}</h2>
+          <p style="font-size:0.85rem; color:var(--slate); margin-bottom:12px;">${t(C.waterSystem.subtitle)}</p>
           <ol style="font-size:0.85rem; padding-left:1.2rem; color:var(--dark); margin-bottom:15px;">
             ${stepsHTML}
           </ol>
@@ -370,14 +375,14 @@
     ).join("");
 
     // ── Modal checkout — textos ────
-    document.getElementById("modal-title").textContent       = t(C.ui.modal.title);
-    document.getElementById("modal-subtitle").textContent    = t(C.ui.modal.subtitle);
-    document.getElementById("btn-confirm").textContent       = t(C.ui.modal.confirm);
-    document.getElementById("btn-stay").textContent          = t(C.ui.modal.stay);
-    document.getElementById("modal-exp-title").textContent   = t(C.ui.modal.experienceTitle);
-    document.getElementById("modal-exp-subtitle").textContent= t(C.ui.modal.experienceSubtitle);
-    document.getElementById("btn-excellent").textContent     = t(C.ui.modal.excellent);
-    document.getElementById("btn-suggestions").textContent   = t(C.ui.modal.suggestions);
+    document.getElementById("modal-title").textContent        = t(C.ui.modal.title);
+    document.getElementById("modal-subtitle").textContent     = t(C.ui.modal.subtitle);
+    document.getElementById("btn-confirm").textContent        = t(C.ui.modal.confirm);
+    document.getElementById("btn-stay").textContent           = t(C.ui.modal.stay);
+    document.getElementById("modal-exp-title").textContent    = t(C.ui.modal.experienceTitle);
+    document.getElementById("modal-exp-subtitle").textContent = t(C.ui.modal.experienceSubtitle);
+    document.getElementById("btn-excellent").textContent      = t(C.ui.modal.excellent);
+    document.getElementById("btn-suggestions").textContent    = t(C.ui.modal.suggestions);
 
     // ── Video modal: dimensiones ────
     if (C.video && C.video.youtubeId) {
