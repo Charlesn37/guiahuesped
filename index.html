@@ -399,29 +399,35 @@
       return { matrix: buildMatrix(ecCw, bestId), maskId: bestId };
     }
 
-    window.generateWifiQR = function(ssid, password) {
+    // Devuelve el id del canvas; el canvas se pinta después de insertarse en el DOM
+    // via placeWifiQR(). iOS Safari detecta <canvas> en clic largo y ofrece
+    // escanear el QR — los data: URI en <img> no activan ese comportamiento.
+    window.buildWifiMatrix = function(ssid, password) {
       var wifiStr = "WIFI:S:" + ssid + ";T:WPA;P:" + password + ";;";
       var dataCw  = encodeData(wifiStr);
       var ecCw    = rsEncode(dataCw, 16);
       var result  = bestMask(ecCw);
-      var m       = result.matrix;
-      var cell    = 8, quiet = 2 * cell;
-      var size    = SIZE * cell + quiet * 2;
-      var svg     = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" shape-rendering="crispEdges">';
-      svg        += '<rect width="' + size + '" height="' + size + '" fill="white"/>';
+      return result.matrix;
+    };
+
+    window.paintWifiQR = function(canvasId, matrix) {
+      var canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      var cell = 8, quiet = 2 * cell;
+      var size = SIZE * cell + quiet * 2;
+      canvas.width  = size;
+      canvas.height = size;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = "#000000";
       for (var r = 0; r < SIZE; r++) {
         for (var c = 0; c < SIZE; c++) {
-          if (m[r][c]) {
-            svg += '<rect x="' + (c*cell+quiet) + '" y="' + (r*cell+quiet) + '" width="' + cell + '" height="' + cell + '" fill="black"/>';
+          if (matrix[r][c]) {
+            ctx.fillRect(c * cell + quiet, r * cell + quiet, cell, cell);
           }
         }
       }
-      svg += '</svg>';
-      // Renderizar como <img> con data URI: iOS y Android detectan la imagen
-      // en clic largo y ofrecen conectarse al Wi-Fi directamente.
-      // SVG inline no es reconocido por el escáner del sistema operativo.
-      var encoded = 'data:image/svg+xml;base64,' + btoa(svg);
-      return '<img src="' + encoded + '" width="180" height="180" alt="QR Wi-Fi" style="display:block; image-rendering:pixelated; border-radius:8px;">';
     };
   })();
 
@@ -561,9 +567,9 @@
     // ── Wi-Fi (sección expandida con QR) ─────────────────────────
     {
       const pass = C.wifi.password.split("").reverse().join("");
-      const qrSvg = (C.wifi.showQr && window.generateWifiQR)
-        ? window.generateWifiQR(C.wifi.ssid, pass)
-        : "";
+      const wifiMatrix = (C.wifi.showQr && window.buildWifiMatrix)
+        ? window.buildWifiMatrix(C.wifi.ssid, pass)
+        : null;
 
       sectionsHTML += `
         <section class="section" id="wifi" aria-labelledby="wifi-title">
@@ -589,13 +595,13 @@
                 <button class="wifi-copy-inline" id="wifi-copy-btn"
                   onclick="copyWifi()"
                   aria-label="${t(C.ui.wifi.connect)} — Red: ${C.wifi.ssid}">
-                  ${t(C.ui.wifi.copyBtn)}
+                  ${t(C.ui.wifi.copyBtn) || (window.__lang === "es" ? "Copiar clave" : "Copy password")}
                 </button>
               </div>
             </div>
-            ${qrSvg ? `
+            ${wifiMatrix ? `
             <div class="wifi-qr-wrap">
-              ${qrSvg}
+              <canvas id="wifi-qr-canvas" style="width:180px;height:180px;border-radius:8px;display:block;"></canvas>
               <span class="wifi-qr-label">${t(C.ui.wifi.connectQr)}</span>
             </div>` : ""}
           </div>
@@ -711,6 +717,11 @@
 
     container.innerHTML = sectionsHTML;
 
+    // Pintar el QR en el canvas recién insertado en el DOM
+    if (wifiMatrix && window.paintWifiQR) {
+      window.paintWifiQR("wifi-qr-canvas", wifiMatrix);
+    }
+
     // ── Checklist de salida ──────────────────────────────────────
     document.getElementById("checklist-items").innerHTML = C.checkoutChecklist.map((item, i) =>
       `<label class="check-label" id="lbl-${i}">
@@ -766,7 +777,7 @@
       btn.textContent = t(C.ui.wifi.copied).trim();
       btn.style.background = "var(--success)";
       setTimeout(() => {
-        btn.textContent = t(C.ui.wifi.copyBtn);
+        btn.textContent = t(C.ui.wifi.copyBtn) || (window.__lang === "es" ? "Copiar clave" : "Copy password");
         btn.style.background = "";
       }, 3000);
     };
