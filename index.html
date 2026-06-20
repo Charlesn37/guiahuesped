@@ -407,7 +407,7 @@
       var m       = result.matrix;
       var cell    = 8, quiet = 2 * cell;
       var size    = SIZE * cell + quiet * 2;
-      var svg     = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" width="160" height="160" shape-rendering="crispEdges">';
+      var svg     = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" shape-rendering="crispEdges">';
       svg        += '<rect width="' + size + '" height="' + size + '" fill="white"/>';
       for (var r = 0; r < SIZE; r++) {
         for (var c = 0; c < SIZE; c++) {
@@ -417,7 +417,11 @@
         }
       }
       svg += '</svg>';
-      return svg;
+      // Renderizar como <img> con data URI: iOS y Android detectan la imagen
+      // en clic largo y ofrecen conectarse al Wi-Fi directamente.
+      // SVG inline no es reconocido por el escáner del sistema operativo.
+      var encoded = 'data:image/svg+xml;base64,' + btoa(svg);
+      return '<img src="' + encoded + '" width="180" height="180" alt="QR Wi-Fi" style="display:block; image-rendering:pixelated; border-radius:8px;">';
     };
   })();
 
@@ -585,7 +589,7 @@
                 <button class="wifi-copy-inline" id="wifi-copy-btn"
                   onclick="copyWifi()"
                   aria-label="${t(C.ui.wifi.connect)} — Red: ${C.wifi.ssid}">
-                  ${t(C.ui.wifi.connect).replace(" — Toca para copiar la clave","").replace(" — Tap to copy the password","")}
+                  ${t(C.ui.wifi.copyBtn)}
                 </button>
               </div>
             </div>
@@ -762,9 +766,7 @@
       btn.textContent = t(C.ui.wifi.copied).trim();
       btn.style.background = "var(--success)";
       setTimeout(() => {
-        btn.textContent = t(C.ui.wifi.connect)
-          .replace(" — Toca para copiar la clave","")
-          .replace(" — Tap to copy the password","");
+        btn.textContent = t(C.ui.wifi.copyBtn);
         btn.style.background = "";
       }, 3000);
     };
