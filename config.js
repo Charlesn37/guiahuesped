@@ -31,6 +31,7 @@ var GUEST_CONFIG = {
       networkLabel:  { es: "Red",    en: "Network"  },
       passwordLabel: { es: "Clave",  en: "Password" },
       connect:       { es: "Wi-Fi — Toca para copiar la clave",       en: "Wi-Fi — Tap to copy the password"      },
+      copyBtn:       { es: "Copiar clave",                                en: "Copy password"                         },
       connectQr:     { es: "O escanea el código QR con tu cámara",    en: "Or scan the QR code with your camera"  },
       copied:        { es: "¡Copiado al portapapeles!",               en: "Copied to clipboard!"                  },
       fallback:      { es: "Clave:",                                  en: "Password:"                             },
@@ -104,7 +105,7 @@ var GUEST_CONFIG = {
   // ──────────────────────────────────────────────────────────────
   wifi: {
     ssid:          "Infinitum 152D",
-    password:      "qnapWP5fgyF",   // contraseña invertida: FYgf5WPanq
+    password:      "Fygf5PWpanq",   
     showQr:        true,            // muestra QR escaneable además del botón copiar
   },
 
@@ -190,7 +191,7 @@ var GUEST_CONFIG = {
       { icon: "💬", label: { es: "Anfitrión (WA)", en: "Host (WA)"     }, number: "523328329427", isWhatsapp: true },
     ],
     extintor: {
-      show: true,
+      show: false,
       body: {
         es: "El extintor está ubicado en el pasillo del edificio, junto al elevador. Planta baja, edificio 7.",
         en: "The fire extinguisher is located in the building hallway, next to the elevator. Ground floor, building 7.",
