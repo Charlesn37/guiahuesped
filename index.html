@@ -720,7 +720,7 @@
       const np = C.nearbyPlaces;
       const catsHTML = np.categories.map(cat => {
         const itemsHTML = cat.items.map(item => {
-          const mapsUrl = `https://www.google.com/maps/place/?q=place_id:${item.mapsId}`;
+          const mapsUrl = `https://maps.google.com/maps?q=place_id:${item.mapsId}`;
           return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"
               class="poi-item"
               aria-label="${t(item.name)} — ${t(item.detail)}">
