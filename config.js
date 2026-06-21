@@ -105,7 +105,7 @@ var GUEST_CONFIG = {
   // ──────────────────────────────────────────────────────────────
   wifi: {
     ssid:          "Infinitum 152D",
-    password:      "Fygf5PWpanq",
+    password:      "Fygf5PWpanq",   // contraseña invertida: qnapWP5fgyF (valor real)
     showQr:        true,            // muestra QR escaneable además del botón copiar
   },
 
@@ -190,7 +190,7 @@ var GUEST_CONFIG = {
       { icon: "🚓", label: { es: "Policía",        en: "Police"        }, number: "911"            },
       { icon: "💬", label: { es: "Anfitrión (WA)", en: "Host (WA)"     }, number: "523328329427", isWhatsapp: true },
     ],
-    //extintor: {
+    extintor: {
       show: false,
       body: {
         es: "El extintor está ubicado en el pasillo del edificio, junto al elevador. Planta baja, edificio 7.",
@@ -260,77 +260,8 @@ var GUEST_CONFIG = {
     },
   },
 
-
   // ──────────────────────────────────────────────────────────────
-  // 16. PUNTOS DE INTERÉS CERCANOS
-  // Datos verificados via Google Places. Coordenadas base CarAle:
-  // 20.736688, -105.257063 (PPPV+M5, San Vicente, Nay. 63737)
-  // ──────────────────────────────────────────────────────────────
-  nearbyPlaces: {
-    show: true,
-    icon: "📍",
-    title: { es: "Qué hay cerca",  en: "What's nearby" },
-    categories: [
-      {
-        icon:  "🏖️",
-        title: { es: "Playa",      en: "Beach"         },
-        items: [
-          {
-            name:   { es: "Playa Bucerías",    en: "Bucerías Beach"  },
-            detail: { es: "~8 min en auto · Arena suave, aguas tranquilas, ideal para nadar", en: "~8 min drive · Soft sand, calm waters, great for swimming" },
-            mapsId: "ChIJSb0hr-pAIYQR-BVRcOFqs3I",
-          },
-        ],
-      },
-      {
-        icon:  "🛒",
-        title: { es: "Tienda / Supermercado",   en: "Grocery"       },
-        items: [
-          {
-            name:   { es: "Abarrotes Los Güeros",  en: "Abarrotes Los Güeros"  },
-            detail: { es: "~5 min en auto · Abarrotes locales en San Vicente, 7am–11pm todos los días", en: "~5 min drive · Local grocery in San Vicente, open 7am–11pm daily" },
-            mapsId: "ChIJA72i001GIYQRjlmqbAgOEZ0",
-          },
-          {
-            name:   { es: "Mega Bahía de Banderas",  en: "Mega Bahía de Banderas"  },
-            detail: { es: "~10 min en auto · Supermercado completo, precios accesibles, banco incluido", en: "~10 min drive · Full supermarket, good prices, bank inside" },
-            mapsId: "ChIJMye7csxAIYQRVDZJ8_Q9YTg",
-          },
-        ],
-      },
-      {
-        icon:  "💊",
-        title: { es: "Farmacia",     en: "Pharmacy"     },
-        items: [
-          {
-            name:   { es: "Farmacia Guadalajara",  en: "Farmacia Guadalajara"  },
-            detail: { es: "~3 min en auto · Abierta las 24 horas · Medicamentos y artículos de conveniencia", en: "~3 min drive · Open 24 hours · Medications and convenience items" },
-            mapsId: "ChIJlWDSKK5HIYQRJE6ZWazZh3Y",
-          },
-        ],
-      },
-      {
-        icon:  "🍽️",
-        title: { es: "Para comer",   en: "Dining"        },
-        items: [
-          {
-            name:   { es: "Restaurante Don Fernando",   en: "Restaurant Don Fernando"   },
-            detail: { es: "Pescado zarandeado icónico · 4.6★ (1,372 reseñas) · Mar–Dom 1pm–6:30pm · Reservar con anticipación", en: "Iconic grilled fish · 4.6★ (1,372 reviews) · Tue–Sun 1pm–6:30pm · Reserve ahead" },
-            mapsId: "ChIJYXKulrBHIYQRvkYbhBWJh3c",
-          },
-          {
-            name:   { es: "Las Marías",  en: "Las Marías"  },
-            detail: { es: "Desayunos y comida · 4.5★ · Lun–Dom 7:30am–2:30pm", en: "Breakfast and lunch · 4.5★ · Mon–Sun 7:30am–2:30pm" },
-            mapsId: "ChIJuXoiZnhHIYQRgOzSLp7S-tw",
-          },
-        ],
-      },
-    ],
-  },
-
-  // ──────────────────────────────────────────────────────────────
-  // 17. COLORES DE MARCA
-
+  // 16. COLORES DE MARCA
   // Estos valores sobreescriben las CSS variables --primary,
   // --primary-dark y --accent en runtime.
   // themeColor en property solo afecta el meta tag del navegador.
