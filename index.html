@@ -129,19 +129,6 @@
     .gas-leak-steps li:last-child { border-bottom: none; }
     .extintor-note { font-size: 0.8rem; color: var(--slate); background: white; border-radius: 10px; padding: 0.8rem; margin-top: 1rem; border: 1px solid #fecdd3; }
     .extintor-note strong { color: var(--dark); display: block; margin-bottom: 2px; }
-
-    /* ── Puntos de interés ───────────────────────────────────────── */
-    .poi-category { margin-bottom: 1.4rem; }
-    .poi-category:last-child { margin-bottom: 0; }
-    .poi-category-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--slate); font-weight: 700; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px; }
-    .poi-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: var(--dark); transition: background 0.1s; }
-    .poi-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .poi-item:active { opacity: 0.7; }
-    .poi-item:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
-    .poi-item-text { flex: 1; }
-    .poi-item-name { font-size: 0.9rem; font-weight: 700; color: var(--dark); display: block; }
-    .poi-item-detail { font-size: 0.78rem; color: var(--slate); line-height: 1.4; display: block; margin-top: 2px; }
-    .poi-arrow { color: var(--primary); flex-shrink: 0; margin-top: 2px; opacity: 0.6; }
   </style>
 </head>
 
@@ -552,19 +539,6 @@
         </a>`;
     }
 
-    // Botón Qué hay cerca
-    if (C.nearbyPlaces && C.nearbyPlaces.show) {
-      grid.innerHTML += `
-        <a href="#cercania" class="btn-card" role="listitem">
-          <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          ${t(C.nearbyPlaces.title)}
-        </a>`;
-    }
-
     // Botón checkout — sin onclick inline para evitar scope issues en HTML dinámico
     grid.innerHTML += `
       <button id="btn-checkout-grid" class="btn-card btn-full" aria-haspopup="dialog" role="listitem">
@@ -711,39 +685,6 @@
             ${gasSection}
             ${extSection}
             ${contactsHTML ? `<div class="emergency-contacts">${contactsHTML}</div>` : ""}
-          </div>
-        </section>`;
-    }
-
-    // ── Puntos de interés ─────────────────────────────────────────
-    if (C.nearbyPlaces && C.nearbyPlaces.show) {
-      const np = C.nearbyPlaces;
-      const catsHTML = np.categories.map(cat => {
-        const itemsHTML = cat.items.map(item => {
-          const mapsUrl = `https://www.google.com/maps/place/?q=place_id:${item.mapsId}`;
-          return `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer"
-              class="poi-item"
-              aria-label="${t(item.name)} — ${t(item.detail)}">
-            <div class="poi-item-text">
-              <span class="poi-item-name">${t(item.name)}</span>
-              <span class="poi-item-detail">${t(item.detail)}</span>
-            </div>
-            <svg class="poi-arrow" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
-            </svg>
-          </a>`;
-        }).join("");
-        return `<div class="poi-category">
-          <div class="poi-category-title">${cat.icon} ${t(cat.title)}</div>
-          ${itemsHTML}
-        </div>`;
-      }).join("");
-
-      sectionsHTML += `
-        <section class="section" id="cercania" aria-labelledby="poi-title">
-          <div class="content-box">
-            <h2 id="poi-title">${np.icon} ${t(np.title)}</h2>
-            ${catsHTML}
           </div>
         </section>`;
     }
