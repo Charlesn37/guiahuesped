@@ -402,19 +402,19 @@
     // Devuelve el id del canvas; el canvas se pinta después de insertarse en el DOM
     // via placeWifiQR(). iOS Safari detecta <canvas> en clic largo y ofrece
     // escanear el QR — los data: URI en <img> no activan ese comportamiento.
-    window.buildWifiMatrix = function(ssid, password) {
-      var wifiStr = "WIFI:S:" + ssid + ";T:WPA;P:" + password + ";;";
+    // Genera el QR como PNG data URI usando un canvas offscreen.
+    // <img src="data:image/png"> es reconocido por iOS Safari en clic largo
+    // para conectarse al Wi-Fi. Canvas visible tiene problemas en Chrome;
+    // canvas offscreen + toDataURL resuelve ambos browsers.
+    window.generateWifiPNG = function(ssid, password) {
+      var wifiStr = "WIFI:T:WPA;S:" + ssid + ";P:" + password + ";;";
       var dataCw  = encodeData(wifiStr);
       var ecCw    = rsEncode(dataCw, 16);
       var result  = bestMask(ecCw);
-      return result.matrix;
-    };
-
-    window.paintWifiQR = function(canvasId, matrix) {
-      var canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      var cell = 8, quiet = 2 * cell;
+      var matrix  = result.matrix;
+      var cell = 8, quiet = 3 * cell;
       var size = SIZE * cell + quiet * 2;
+      var canvas = document.createElement("canvas");
       canvas.width  = size;
       canvas.height = size;
       var ctx = canvas.getContext("2d");
@@ -428,6 +428,7 @@
           }
         }
       }
+      return canvas.toDataURL("image/png");
     };
   })();
 
@@ -538,14 +539,16 @@
         </a>`;
     }
 
-    // Botón checkout
+    // Botón checkout — sin onclick inline para evitar scope issues en HTML dinámico
     grid.innerHTML += `
-      <button class="btn-card btn-full" onclick="openCheckout()" aria-haspopup="dialog" role="listitem">
+      <button id="btn-checkout-grid" class="btn-card btn-full" aria-haspopup="dialog" role="listitem">
         <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
         ${t(C.ui.buttons.checkout)}
       </button>`;
+    // Asignar listener después de insertar en el DOM
+    document.getElementById("btn-checkout-grid").addEventListener("click", openCheckout);
 
     // ── Secciones ─────────────────────────────────────────────────
     // ORDEN: Bienvenida → WiFi → Agua/Entretenimieto → Emergencias → Reglas → Salida tardía
@@ -567,8 +570,8 @@
     // ── Wi-Fi (sección expandida con QR) ─────────────────────────
     {
       const pass = C.wifi.password.split("").reverse().join("");
-      const wifiMatrix = (C.wifi.showQr && window.buildWifiMatrix)
-        ? window.buildWifiMatrix(C.wifi.ssid, pass)
+      const wifiPNG = (C.wifi.showQr && window.generateWifiPNG)
+        ? window.generateWifiPNG(C.wifi.ssid, pass)
         : null;
 
       sectionsHTML += `
@@ -599,45 +602,46 @@
                 </button>
               </div>
             </div>
-            ${wifiMatrix ? `
+            ${wifiPNG ? `
             <div class="wifi-qr-wrap">
-              <canvas id="wifi-qr-canvas" style="width:180px;height:180px;border-radius:8px;display:block;"></canvas>
+              <img src="${wifiPNG}" width="200" height="200"
+                alt="QR Wi-Fi ${C.wifi.ssid}"
+                style="display:block; border-radius:8px; image-rendering:pixelated;">
               <span class="wifi-qr-label">${t(C.ui.wifi.connectQr)}</span>
             </div>` : ""}
           </div>
         </section>`;
     }
 
-    // ── Agua caliente + entretenimiento ──────────────────────────
-    if ((C.waterSystem && C.waterSystem.show) || (C.entertainment && C.entertainment.show)) {
-      sectionsHTML += `<section class="section" id="agua" aria-labelledby="agua-title"><div class="content-box">`;
+    // ── Agua caliente ─────────────────────────────────────────────
+    if (C.waterSystem && C.waterSystem.show) {
+      const stepsHTML = C.waterSystem.steps.map(s => `<li>${t(s)}</li>`).join("");
+      const videoBtn  = (C.video && C.video.youtubeId)
+        ? `<button id="btn-open-video" class="video-link" aria-label="${t(C.video.buttonLabel)}">
+             <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+             ${t(C.video.buttonLabel)}
+           </button>`
+        : "";
+      sectionsHTML += `
+        <section class="section" id="agua" aria-labelledby="agua-title">
+          <div class="content-box">
+            <h2 id="agua-title">${C.waterSystem.icon} ${t(C.waterSystem.title)}</h2>
+            <p style="font-size:0.85rem; color:var(--slate); margin-bottom:12px;">${t(C.waterSystem.subtitle)}</p>
+            <ol style="font-size:0.85rem; padding-left:1.2rem; color:var(--dark); margin-bottom:15px;">${stepsHTML}</ol>
+            ${videoBtn}
+          </div>
+        </section>`;
+    }
 
-      if (C.waterSystem && C.waterSystem.show) {
-        const stepsHTML = C.waterSystem.steps.map(s => `<li>${t(s)}</li>`).join("");
-        const videoBtn  = (C.video && C.video.youtubeId)
-          ? `<button onclick="openVideo()" class="video-link" aria-label="${t(C.video.buttonLabel)}">
-               <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-               ${t(C.video.buttonLabel)}
-             </button>`
-          : "";
-        sectionsHTML += `
-          <h2 id="agua-title">${C.waterSystem.icon} ${t(C.waterSystem.title)}</h2>
-          <p style="font-size:0.85rem; color:var(--slate); margin-bottom:12px;">${t(C.waterSystem.subtitle)}</p>
-          <ol style="font-size:0.85rem; padding-left:1.2rem; color:var(--dark); margin-bottom:15px;">${stepsHTML}</ol>
-          ${videoBtn}`;
-
-        if (C.entertainment && C.entertainment.show) {
-          sectionsHTML += `<hr style="margin:1.5rem 0; border:0; border-top:1px solid #f1f5f9;">`;
-        }
-      }
-
-      if (C.entertainment && C.entertainment.show) {
-        sectionsHTML += `
-          <h2>${C.entertainment.icon} ${t(C.entertainment.title)}</h2>
-          <p style="font-size:0.85rem; color:var(--slate);">${t(C.entertainment.body)}</p>`;
-      }
-
-      sectionsHTML += `</div></section>`;
+    // ── Entretenimiento ───────────────────────────────────────────
+    if (C.entertainment && C.entertainment.show) {
+      sectionsHTML += `
+        <section class="section" id="entretenimiento" aria-labelledby="entret-title">
+          <div class="content-box">
+            <h2 id="entret-title">${C.entertainment.icon} ${t(C.entertainment.title)}</h2>
+            <p style="font-size:0.85rem; color:var(--slate);">${t(C.entertainment.body)}</p>
+          </div>
+        </section>`;
     }
 
     // ── Emergencias ──────────────────────────────────────────────
@@ -717,10 +721,11 @@
 
     container.innerHTML = sectionsHTML;
 
-    // Pintar el QR en el canvas recién insertado en el DOM
-    if (wifiMatrix && window.paintWifiQR) {
-      window.paintWifiQR("wifi-qr-canvas", wifiMatrix);
-    }
+
+
+    // Listener video btn (insertado dinámicamente, sin onclick inline)
+    const videoBtnEl = document.getElementById("btn-open-video");
+    if (videoBtnEl) videoBtnEl.addEventListener("click", openVideo);
 
     // ── Checklist de salida ──────────────────────────────────────
     document.getElementById("checklist-items").innerHTML = C.checkoutChecklist.map((item, i) =>
