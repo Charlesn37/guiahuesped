@@ -1,39 +1,57 @@
-const GUEST_CONFIG = {
+/**
+ * ╔══════════════════════════════════════════════════════════════╗
+ * ║           GUIAHUÉSPED — ARCHIVO DE CONFIGURACIÓN             ║
+ * ║  Edita solo este archivo para personalizar cada propiedad.   ║
+ * ║  No es necesario tocar index.html salvo cambios de diseño.   ║
+ * ╚══════════════════════════════════════════════════════════════╝
+ */
 
+var GUEST_CONFIG = {
+
+  // ──────────────────────────────────────────────────────────────
+  // 1. IDENTIDAD DE LA PROPIEDAD
+  // ──────────────────────────────────────────────────────────────
   property: {
-    name:        "Residencial Vista Aurora",
-    tagline:     { es: "Experiencia Ejecutiva · Confort Total",                                               en: "Executive Experience · Total Comfort"                                          },
-    description: { es: "Guía digital para huéspedes — acceso, reglas, servicios y asistencia en tiempo real.", en: "Digital guest guide — access, rules, services, and real-time support."       },
+    name:        "CarAle",
+    tagline:     { es: "Tu Estancia en Calma",                                        en: "Your Peaceful Stay"                                       },
+    description: { es: "Guía de bienvenida para huéspedes de CarAle, depto 302.",    en: "Welcome guide for CarAle guests, unit 302."                },
     language:    "es",
     themeColor:  "#0284c7",
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 2. TEXTOS DE INTERFAZ — no tocar salvo traducción
+  // ──────────────────────────────────────────────────────────────
   ui: {
     welcomeHeader: { es: "Bienvenidos a",  en: "Welcome to"  },
-    checkinLabel:       { es: "Llegada",         en: "Check-in"    },
-    checkoutLabel:      { es: "Salida",          en: "Check-out"   },
+    checkinLabel:  { es: "Llegada",        en: "Check-in"    },
+    checkoutLabel: { es: "Salida",         en: "Check-out"   },
 
     wifi: {
-      connect:  { es: "Conectar a Wi-Fi (Copiar clave)",  en: "Connect to Wi-Fi (Copy password)" },
-      copied:   { es: "¡Copiado! 🎉",                     en: "Copied! 🎉"                        },
-      fallback: { es: "Clave:",                            en: "Password:"                         },
+      networkLabel:  { es: "Red",    en: "Network"  },
+      passwordLabel: { es: "Clave",  en: "Password" },
+      connect:       { es: "Wi-Fi — Toca para copiar la clave",       en: "Wi-Fi — Tap to copy the password"      },
+      copyBtn:       { es: "Copiar clave",                                en: "Copy password"                         },
+      connectQr:     { es: "O escanea el código QR con tu cámara",    en: "Or scan the QR code with your camera"  },
+      copied:        { es: "¡Copiado al portapapeles!",               en: "Copied to clipboard!"                  },
+      fallback:      { es: "Clave:",                                  en: "Password:"                             },
     },
 
     buttons: {
       location: { es: "Ubicación GPS", en: "GPS Location" },
-      checkout:  { es: "Check-out",     en: "Check-out"    },
+      checkout:  { es: "Check-out",    en: "Check-out"    },
     },
 
     modal: {
-      title:              { es: "Cierre de Estancia",                   en: "Checkout"                         },
+      title:              { es: "Cierre de Estancia",                    en: "Checkout"                        },
       subtitle:           { es: "Confirma estos puntos antes de salir:", en: "Please confirm before leaving:"  },
-      confirm:            { es: "Confirmar y continuar",                en: "Confirm and continue"             },
-      stay:               { es: "Seguir aquí",                          en: "Stay here"                        },
-      pendingError:       { es: "Falta(n) {n} punto(s) por confirmar.", en: "{n} item(s) still pending."      },
-      experienceTitle:    { es: "¿Cómo fue tu experiencia?",            en: "How was your stay?"              },
-      experienceSubtitle: { es: "Tu mensaje nos ayuda a mejorar.",      en: "Your feedback helps us improve." },
-      excellent:          { es: "¡Excelente! Todo perfecto",            en: "Excellent! Everything was great" },
-      suggestions:        { es: "Hubo detalles / sugerencias",          en: "Some details / suggestions"      },
+      confirm:            { es: "Confirmar y continuar",                 en: "Confirm and continue"            },
+      stay:               { es: "Seguir aquí",                           en: "Stay here"                       },
+      pendingError:       { es: "Falta(n) {n} punto(s) por confirmar.",  en: "{n} item(s) still pending."      },
+      experienceTitle:    { es: "¿Cómo fue tu experiencia?",             en: "How was your stay?"              },
+      experienceSubtitle: { es: "Tu mensaje nos ayuda a mejorar.",       en: "Your feedback helps us improve." },
+      excellent:          { es: "⭐ Todo perfecto",                      en: "⭐ Everything was great"          },
+      suggestions:        { es: "💬 Tengo comentarios",                  en: "💬 I have some feedback"          },
     },
 
     whatsapp: {
@@ -45,129 +63,282 @@ const GUEST_CONFIG = {
     },
 
     checkout: {
-      feedbackExcellent:   { es: "¡Excelente estancia! ⭐⭐⭐⭐",               en: "Excellent stay! ⭐⭐⭐⭐"              },
-      feedbackSuggestions: { es: "Estancia buena, tengo algunas sugerencias.", en: "Good stay, I have some suggestions." },
-      waMessage:           {
+      feedbackExcellent:   { es: "Excelente estancia ⭐⭐⭐⭐⭐",            en: "Excellent stay ⭐⭐⭐⭐⭐"             },
+      feedbackSuggestions: { es: "Buena estancia, tengo comentarios.",     en: "Good stay, I have some feedback."   },
+      waMessage: {
         es: "Hola! 👋 Confirmo mi salida de {id}.\n\n✅ Checklist completado.\n⭐ Feedback: {feedback}",
         en: "Hi! 👋 I'm checking out from {id}.\n\n✅ Checklist completed.\n⭐ Feedback: {feedback}",
       },
     },
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 3. HORARIOS
+  // ──────────────────────────────────────────────────────────────
   schedule: {
     checkin:  "3:00 PM",
-    checkout: "11:00 AM",
+    checkout: "12:00 PM",
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 4. BADGE DE IDENTIFICACIÓN
+  // ──────────────────────────────────────────────────────────────
   badge: [
-    { label: { es: "Torre",  en: "Tower"  }, value: "B"      },
-    { label: { es: "Depto",  en: "Unit"   }, value: "804"    },
-    { label: { es: "Acceso", en: "Access" }, value: "A-8842" },
+    { label: { es: "Edificio", en: "Building" }, value: "7"   },
+    { label: { es: "Depto",    en: "Unit"     }, value: "302" },
+    { label: { es: "Cajón",    en: "Parking"  }, value: "302" },
   ],
 
+  // ──────────────────────────────────────────────────────────────
+  // 5. CONTACTO
+  // ──────────────────────────────────────────────────────────────
   contact: {
-    whatsapp: "5213312345678",
-    deptId:   "Vista Aurora 804",
+    whatsapp: "523328329427",
+    deptId:   "CarAle 302",
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 6. WI-FI
+  // NOTA: La contraseña es obfuscation superficial (reverse string),
+  // no seguridad real. Cualquier persona con acceso al source la ve.
+  // El QR generado en runtime no expone la contraseña en texto plano.
+  // ──────────────────────────────────────────────────────────────
   wifi: {
-    password: "Aurora2026VIP",
+    ssid:          "Infinitum 152D",
+    password:      "Fygf5PWpanq",
+    showQr:        true,            // muestra QR escaneable además del botón copiar
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 7. UBICACIÓN GPS
+  // ──────────────────────────────────────────────────────────────
   location: {
-    googleMapsUrl: "https://maps.app.goo.gl/9D4PryH5XYgQPgAh9",
+    googleMapsUrl: "https://maps.app.goo.gl/fMkzaC7NjFFRRnCu6",
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 8. VIDEO TUTORIAL
+  // ──────────────────────────────────────────────────────────────
   video: {
     youtubeId:   "APubdwLjOmQ",
-    title:       { es: "Cómo acceder al departamento", en: "How to access the unit"    },
-    buttonLabel: { es: "Ver acceso rápido (30 seg)",   en: "Quick access video (30s)"  },
-    modalLabel:  { es: "Tutorial de acceso",           en: "Access tutorial"           },
+    title:       { es: "Tutorial boiler agua caliente",  en: "Hot water boiler tutorial"     },
+    buttonLabel: { es: "Ver Video Tutorial (15 seg)",    en: "Watch Video Tutorial (15 sec)"  },
+    modalLabel:  { es: "Video tutorial boiler",          en: "Boiler video tutorial"          },
     vertical:    true,
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 9. BIENVENIDA
+  // ──────────────────────────────────────────────────────────────
   welcome: {
     show:  true,
     icon:  "👋",
-    title: { es: "Bienvenido a Vista Aurora",                                                                                                                                                    en: "Welcome to Vista Aurora"                                                                                                                                    },
-    body:  { es: "Hemos preparado este espacio para que tu estancia sea práctica, cómoda y sin fricción. Aquí encontrarás todo lo necesario en segundos.",                                       en: "We've prepared this space to make your stay smooth, comfortable, and effortless. Everything you need is right here."                                        },
-    note:  { es: "Soporte disponible 24/7 vía WhatsApp.",                                                                                                                                        en: "24/7 support available via WhatsApp."                                                                                                                       },
+    title: { es: "Bienvenido",                                                                                           en: "Welcome"                                                                                   },
+    body:  { es: "Tu estancia está lista. Aquí encontrarás todo lo necesario para un acceso rápido y sin complicaciones.", en: "Your stay is ready. Here you'll find everything you need for quick and easy access."       },
+    note:  { es: "¿Necesitas ayuda? Escríbenos por WhatsApp desde el botón verde en pantalla.",                           en: "Need help? Message us on WhatsApp using the green button on screen."                        },
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 10. AGUA CALIENTE
+  // ──────────────────────────────────────────────────────────────
   waterSystem: {
     show:     true,
     icon:     "🚿",
-    title:    { es: "Sistema de Agua Caliente",               en: "Hot Water System"           },
-    subtitle: { es: "Configuración en menos de 20 segundos:", en: "Ready in under 20 seconds:" },
+    title:    { es: "Agua Caliente (Boiler)",                en: "Hot Water (Boiler)"          },
+    subtitle: { es: "Para disfrutar de una ducha caliente:", en: "To enjoy a hot shower:"      },
     steps: [
-      { es: "Abre la llave de gas ubicada en el área de servicio.",            en: "Open the gas valve located in the service area."   },
-      { es: "Gira la perilla del boiler a <strong>PILOTO</strong>.",           en: "Turn the boiler knob to <strong>PILOT</strong>."   },
-      { es: "Mantén presionado el botón de encendido durante 10–15 segundos.", en: "Hold the ignition button for 10–15 seconds."       },
-      { es: "Cambia a <strong>ENCENDIDO</strong>.",                            en: "Switch to <strong>ON</strong>."                    },
+      { es: "Ubica el cilindro de gas y abre la llave.",                                                                         en: "Locate the gas cylinder and open the valve."                                                   },
+      { es: "En el calentador, gira la perilla a <strong>PILOTO</strong> y mantén el botón rojo presionado (15 seg).",           en: "On the heater, turn the knob to <strong>PILOT</strong> and hold the red button for 15 seconds." },
+      { es: "Ya encendido, gira a <strong>CALIENTE</strong>.",                                                                   en: "Once lit, turn to <strong>HOT</strong>."                                                       },
     ],
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 11. ENTRETENIMIENTO
+  // ──────────────────────────────────────────────────────────────
   entertainment: {
     show:  true,
     icon:  "📺",
-    title: { es: "Centro de Entretenimiento", en: "Entertainment Center" },
-    body:  { es: "Smart TV con acceso a Netflix, YouTube y Prime Video. Puedes iniciar sesión con tu cuenta. <strong>Recuerda cerrarla antes de salir.</strong>",
-             en: "Smart TV with Netflix, YouTube, and Prime Video. You can log in with your own account. <strong>Remember to sign out before leaving.</strong>" },
+    title: { es: "Entretenimiento",  en: "Entertainment" },
+    body:  {
+      es: "Siéntete libre de usar tus cuentas de streaming en la Smart TV. <strong>Al salir, cierra sesión manualmente para proteger tu cuenta.</strong>",
+      en: "Feel free to use your streaming accounts on the Smart TV. <strong>When leaving, sign out manually to protect your account.</strong>",
+    },
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 12. EMERGENCIAS
+  // Agrega información local relevante para la propiedad.
+  // ──────────────────────────────────────────────────────────────
+  emergency: {
+    show: true,
+    icon: "🚨",
+    title: { es: "Emergencias", en: "Emergencies" },
+    gasLeak: {
+      show:  true,
+      title: { es: "Fuga de gas", en: "Gas leak" },
+      steps: [
+        { es: "No enciendas luces ni aparatos eléctricos.",   en: "Do not turn on lights or electrical devices."  },
+        { es: "Cierra la llave del cilindro de gas.",         en: "Close the gas cylinder valve."                 },
+        { es: "Abre puertas y ventanas para ventilar.",       en: "Open doors and windows to ventilate."          },
+        { es: "Sal del departamento y avisa al anfitrión.",   en: "Leave the unit and contact the host."          },
+      ],
+    },
+    contacts: [
+      { icon: "🚒", label: { es: "Bomberos",       en: "Fire dept."    }, number: "068"            },
+      { icon: "🚑", label: { es: "Cruz Roja",      en: "Red Cross"     }, number: "065"            },
+      { icon: "🚓", label: { es: "Policía",        en: "Police"        }, number: "911"            },
+      { icon: "💬", label: { es: "Anfitrión (WA)", en: "Host (WA)"     }, number: "523328329427", isWhatsapp: true },
+    ],
+    //extintor: {
+      show: false,
+      body: {
+        es: "El extintor está ubicado en el pasillo del edificio, junto al elevador. Planta baja, edificio 7.",
+        en: "The fire extinguisher is located in the building hallway, next to the elevator. Ground floor, building 7.",
+      },
+    },
+  },
+
+  // ──────────────────────────────────────────────────────────────
+  // 13. ARMONÍA / REGLAS
+  // ──────────────────────────────────────────────────────────────
   harmony: {
     show:  true,
     icon:  "📋",
-    title: { es: "Normas del Residencial", en: "Community Rules" },
+    title: { es: "Reglas del Condominio", en: "Community Rules" },
     items: [
       {
         icon:  "🏊",
-        title: { es: "Alberca — 8:00 AM a 10:00 PM",    en: "Pool — 8:00 AM to 10:00 PM"    },
-        body:  { es: "Uso exclusivo para residentes y huéspedes. No se permite música alta ni bebidas alcohólicas.", en: "Exclusive use for residents and guests. No loud music or alcoholic beverages." },
-      },
-      {
-        icon:  "🏋️",
-        title: { es: "Gimnasio — 6:00 AM a 11:00 PM",   en: "Gym — 6:00 AM to 11:00 PM"    },
-        body:  { es: "Acceso con tarjeta. Limpia el equipo después de usarlo.",               en: "Card access required. Please clean equipment after use."                        },
+        title: { es: "Alberca — 9:00 AM a 11:00 PM",              en: "Pool — 9:00 AM to 11:00 PM"              },
+        body:  { es: "Disponible todos los días. Viernes y sábado el horario se extiende hasta medianoche. Disfruta el área respetando su uso: traje de baño obligatorio y sin alimentos, envases de vidrio o música alta.", en: "Available every day. Friday and Saturday hours extend until midnight. Enjoy the area respectfully: swimwear required, no food, glass containers, or loud music." },
       },
       {
         icon:  "🚗",
-        title: { es: "Estacionamiento — #142",           en: "Parking — #142"                },
-        body:  { es: "Espacio asignado. Evita ocupar lugares de visitantes.",                 en: "Assigned space. Please do not use visitor spots."                               },
+        title: { es: "Estacionamiento — Cajón 302",                en: "Parking — Space 302"                     },
+        body:  { es: "Tu lugar está reservado. Utiliza únicamente este espacio para evitar cualquier inconveniente durante tu estancia.", en: "Your spot is reserved. Please use only this space to avoid any issues during your stay." },
       },
       {
         icon:  "🔇",
-        title: { es: "Horario de silencio",              en: "Quiet hours"                   },
-        body:  { es: "De 10:00 PM a 8:00 AM. Evita ruidos elevados.",                        en: "From 10:00 PM to 8:00 AM. Please keep noise to a minimum."                     },
+        title: { es: "Ambiente de descanso — 10:00 PM a 8:00 AM", en: "Quiet hours — 10:00 PM to 8:00 AM"       },
+        body:  { es: "Este es un espacio pensado para el descanso. Mantén un volumen bajo durante la noche.",     en: "This is a space designed for rest. Please keep noise low during the night."                   },
       },
       {
-        icon:  "👥",
-        title: { es: "Visitas",                          en: "Visitors"                      },
-        body:  { es: "Máximo 2 visitantes por huésped. Registro en recepción requerido.",     en: "Maximum 2 visitors per guest. Registration at reception required."              },
+        icon:  "🪟",
+        title: { es: "Balcones y Ventanas",                        en: "Balconies and Windows"                   },
+        body:  { es: "Ayúdanos a conservar la estética del condominio evitando colocar objetos visibles hacia el exterior.", en: "Help us preserve the building's appearance by avoiding placing visible objects facing outside." },
+      },
+      {
+        icon:  "🔒",
+        title: { es: "Acceso controlado",                          en: "Controlled access"                       },
+        body:  { es: "El acceso está limitado a huéspedes registrados para mantener un entorno seguro y tranquilo.", en: "Access is limited to registered guests to maintain a safe and peaceful environment."       },
       },
     ],
-    footer: { es: "El cumplimiento de estas normas garantiza una estancia óptima para todos.", en: "Following these rules ensures a great experience for everyone." },
+    footer: { es: "Gracias por respetar estas reglas. Tu colaboración mantiene la experiencia cómoda para todos.", en: "Thank you for following these rules. Your cooperation keeps the experience comfortable for everyone." },
   },
 
+  // ──────────────────────────────────────────────────────────────
+  // 14. CHECKLIST DE SALIDA
+  // ──────────────────────────────────────────────────────────────
   checkoutChecklist: [
-    { es: "Apagar luces y A/C",               en: "Turn off lights and A/C"       },
-    { es: "Cerrar gas",                        en: "Turn off gas"                  },
-    { es: "Depositar basura",                  en: "Take out trash"                },
-    { es: "Cerrar puertas y ventanas",         en: "Close doors and windows"       },
-    { es: "Verificar pertenencias personales", en: "Check personal belongings"     },
+    { es: "A/C y Luces apagadas",       en: "A/C and lights off"         },
+    { es: "Basura en contenedores",     en: "Trash in containers"        },
+    { es: "Ventanas y Balcón cerrados", en: "Windows and balcony closed" },
+    { es: "Gas cerrado",                en: "Gas turned off"             },
+    { es: "Sesión cerrada en Smart TV", en: "Signed out of Smart TV"     },
   ],
 
+  // ──────────────────────────────────────────────────────────────
+  // 15. SALIDA TARDÍA
+  // ──────────────────────────────────────────────────────────────
   lateCheckout: {
     show:  true,
     icon:  "⏱️",
-    title: { es: "Extensión de estancia",                          en: "Late Checkout"                              },
-    body:  { es: "Solicítala con anticipación. Sujeta a disponibilidad.", en: "Request in advance. Subject to availability." },
+    title: { es: "Salida Tardía",  en: "Late Checkout" },
+    body:  {
+      es: "¿Necesitas un poco más de tiempo? Consúltanos vía WhatsApp el día anterior. Si no hay una reserva inmediata, nos encantará apoyarte.",
+      en: "Need a little more time? Message us on WhatsApp the day before. If there's no immediate booking, we'll be happy to help.",
+    },
   },
 
+
+  // ──────────────────────────────────────────────────────────────
+  // 16. PUNTOS DE INTERÉS CERCANOS
+  // Datos verificados via Google Places. Coordenadas base CarAle:
+  // 20.736688, -105.257063 (PPPV+M5, San Vicente, Nay. 63737)
+  // ──────────────────────────────────────────────────────────────
+  nearbyPlaces: {
+    show: true,
+    icon: "📍",
+    title: { es: "Qué hay cerca",  en: "What's nearby" },
+    categories: [
+      {
+        icon:  "🏖️",
+        title: { es: "Playa",      en: "Beach"         },
+        items: [
+          {
+            name:   { es: "Playa Bucerías",    en: "Bucerías Beach"  },
+            detail: { es: "~8 min en auto · Arena suave, aguas tranquilas, ideal para nadar", en: "~8 min drive · Soft sand, calm waters, great for swimming" },
+            mapsId: "ChIJSb0hr-pAIYQR-BVRcOFqs3I",
+          },
+        ],
+      },
+      {
+        icon:  "🛒",
+        title: { es: "Tienda / Supermercado",   en: "Grocery"       },
+        items: [
+          {
+            name:   { es: "Abarrotes Los Güeros",  en: "Abarrotes Los Güeros"  },
+            detail: { es: "~5 min en auto · Abarrotes locales en San Vicente, 7am–11pm todos los días", en: "~5 min drive · Local grocery in San Vicente, open 7am–11pm daily" },
+            mapsId: "ChIJA72i001GIYQRjlmqbAgOEZ0",
+          },
+          {
+            name:   { es: "Mega Bahía de Banderas",  en: "Mega Bahía de Banderas"  },
+            detail: { es: "~10 min en auto · Supermercado completo, precios accesibles, banco incluido", en: "~10 min drive · Full supermarket, good prices, bank inside" },
+            mapsId: "ChIJMye7csxAIYQRVDZJ8_Q9YTg",
+          },
+        ],
+      },
+      {
+        icon:  "💊",
+        title: { es: "Farmacia",     en: "Pharmacy"     },
+        items: [
+          {
+            name:   { es: "Farmacia Guadalajara",  en: "Farmacia Guadalajara"  },
+            detail: { es: "~3 min en auto · Abierta las 24 horas · Medicamentos y artículos de conveniencia", en: "~3 min drive · Open 24 hours · Medications and convenience items" },
+            mapsId: "ChIJlWDSKK5HIYQRJE6ZWazZh3Y",
+          },
+        ],
+      },
+      {
+        icon:  "🍽️",
+        title: { es: "Para comer",   en: "Dining"        },
+        items: [
+          {
+            name:   { es: "Restaurante Don Fernando",   en: "Restaurant Don Fernando"   },
+            detail: { es: "Pescado zarandeado icónico · 4.6★ (1,372 reseñas) · Mar–Dom 1pm–6:30pm · Reservar con anticipación", en: "Iconic grilled fish · 4.6★ (1,372 reviews) · Tue–Sun 1pm–6:30pm · Reserve ahead" },
+            mapsId: "ChIJYXKulrBHIYQRvkYbhBWJh3c",
+          },
+          {
+            name:   { es: "Las Marías",  en: "Las Marías"  },
+            detail: { es: "Desayunos y comida · 4.5★ · Lun–Dom 7:30am–2:30pm", en: "Breakfast and lunch · 4.5★ · Mon–Sun 7:30am–2:30pm" },
+            mapsId: "ChIJuXoiZnhHIYQRgOzSLp7S-tw",
+          },
+        ],
+      },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────
+  // 17. COLORES DE MARCA
+
+  // Estos valores sobreescriben las CSS variables --primary,
+  // --primary-dark y --accent en runtime.
+  // themeColor en property solo afecta el meta tag del navegador.
+  // ──────────────────────────────────────────────────────────────
   colors: {
-    primary:     "#0284c7",
-    primaryDark: "#020617",
-    accent:      "#22c55e",
+    primary:     null,   // ej: "#0284c7"
+    primaryDark: null,   // ej: "#075985"
+    accent:      null,   // ej: "#f59e0b"
   },
 
 };
